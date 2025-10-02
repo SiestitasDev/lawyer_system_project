@@ -7,7 +7,7 @@ const Rol = db.Rol;
 
 exports.register = async (req, res) => {
   try {
-    const { email, password, id_rol } = req.body;
+    const {name, email, password, id_rol } = req.body;
 
     const existe = await Usuario.findOne({ where: { email } });
     if (existe) return res.status(400).json({ message: "El correo ya está registrado" });
@@ -16,6 +16,7 @@ exports.register = async (req, res) => {
 
     const nuevoUsuario = await Usuario.create({
       email,
+      nombre: name,
       password: hashedPassword,
       id_rol,
     });
