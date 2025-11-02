@@ -2,8 +2,12 @@ import Slider1 from '../../public/img/slider1.jpg'
 import Bienvenidos1 from '../../public/img/bienvenidos1.png'
 import firma1 from '../../public/img/firma1.jpg'
 import { Handshake, Rows4,Map } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
 
 const Home = () => {
+
+  const navigate = useNavigate()
+
   return(
     <>
       <header className="bg-black w-full h-24 flex items-center">
@@ -29,6 +33,7 @@ const Home = () => {
               <h1 className='text-5xl font-semibold'>Lideres en el mercado legal Peruano</h1>
               <button 
                 className='bg-black p-3 text-yellow-200 border-2 border-amber-300 rounded-3xl font-semibold w-[10%] cursor-pointer hover:bg-yellow-200 hover:text-black transition-all duration-100'
+                onClick={() => navigate('/login')}
               >
                 Agendar una cita
               </button>
