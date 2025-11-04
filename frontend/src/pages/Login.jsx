@@ -8,22 +8,22 @@ export const Login = () => {
 
   const [ username, setUsername ] = useState('')
   const [ password, setPassword ] = useState('')
+  const [ error, setError ] = useState('')
 
-  const loginFetch = async (e) => {
+  const loginFetch = (e) => {
     e.preventDefault()
-    try {
-      const res = await fetch('http://localhost:4000/api/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ username, password })
-      })
-      const data = await res.json()
-      console.log(data)
-    } catch (error) {
-      console.error('Error during login:', error)
+    // local/mock credentials for testing
+    const VALID_EMAIL = 'admin@lawyer.com'
+    const VALID_PASSWORD = 'password123'
+
+    if (username === VALID_EMAIL && password === VALID_PASSWORD) {
+      localStorage.setItem('user', JSON.stringify({ email: username }))
+      setError('')
+      navigate('/booking') 
+      return
     }
+
+    setError('Credenciales inválidas. Por favor, inténtalo de nuevo.')
   }
 
   return (
@@ -53,8 +53,9 @@ export const Login = () => {
                 onChange={(e) => setPassword(e.target.value)}
                 className="mb-2 p-2 border border-gray-300 rounded-2xl focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-200"
               />
+              {error && <div className="text-red-500 mt-2">{error}</div>}
               <div>
-                <button className="hover:text-purple-700 text-purple-400 font-semibold cursor-pointer">Contraseña olvidada?</button>
+                <button type="button" className="hover:text-purple-700 text-purple-400 font-semibold cursor-pointer">Contraseña olvidada?</button>
               </div>
             </div>
             <button
@@ -66,6 +67,7 @@ export const Login = () => {
             <div className="flex justify-center mt-4">
               <span className="text-gray-600">¿No tienes una cuenta?</span>
               <button 
+                type="button"
                 className="ml-2 text-purple-500 font-semibold hover:text-purple-700 cursor-pointer"
                 onClick={() => navigate('/register')}
               >
@@ -78,3 +80,5 @@ export const Login = () => {
     </div>
   )
 }
+
+export default Login
