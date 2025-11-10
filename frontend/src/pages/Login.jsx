@@ -8,22 +8,9 @@ export const Login = () => {
 
   const [ username, setUsername ] = useState('')
   const [ password, setPassword ] = useState('')
-  const [ error, setError ] = useState('')
 
   const loginFetch = (e) => {
     e.preventDefault()
-    // local/mock credentials for testing
-    const VALID_EMAIL = 'admin@lawyer.com'
-    const VALID_PASSWORD = 'password123'
-
-    if (username === VALID_EMAIL && password === VALID_PASSWORD) {
-      localStorage.setItem('user', JSON.stringify({ email: username }))
-      setError('')
-      navigate('/booking') 
-      return
-    }
-
-    setError('Credenciales inválidas. Por favor, inténtalo de nuevo.')
   }
 
   return (
@@ -53,7 +40,6 @@ export const Login = () => {
                 onChange={(e) => setPassword(e.target.value)}
                 className="mb-2 p-2 border border-gray-300 rounded-2xl focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-200"
               />
-              {error && <div className="text-red-500 mt-2">{error}</div>}
               <div>
                 <button type="button" className="hover:text-purple-700 text-purple-400 font-semibold cursor-pointer">Contraseña olvidada?</button>
               </div>

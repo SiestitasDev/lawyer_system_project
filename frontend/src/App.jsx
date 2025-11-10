@@ -3,6 +3,7 @@ import Home from './pages/Home'
 import { Login } from './pages/Login'
 import { Register } from './pages/Register'
 import { Booking } from './pages/Booking'
+import PrivateRoute from './components/PrivateRoute/PrivateRoute'
 import { BrowserRouter as Router, Routes, Route} from 'react-router-dom'
 function App() {
 
@@ -12,7 +13,7 @@ function App() {
         <Route path='/' element={<Home />} />
         <Route path='/login' element={ <Login /> } />
         <Route path='/register' element={ <Register /> } />
-        <Route path='/booking' element={ <Booking /> } />
+        <Route path='/booking' element={<PrivateRoute><Booking /></PrivateRoute>} />
       </Routes>
     </Router>
   )
