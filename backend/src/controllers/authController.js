@@ -1,10 +1,10 @@
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken")
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
-exports.register = async (req, res) => {
-  res.json({ success: true, message: "Register"});
+export const register = async (req, res) => {
+  res.json({ success: true, message: "Register" });
 };
 
-exports.login = async (req, res) => {
-  res.json({ success: true, message: "Login"});
+export const login = async (req, res) => {
+  res.json({ success: true, message: "Login" });
 };
