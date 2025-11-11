@@ -3,6 +3,13 @@ import Bienvenidos1 from '../../public/img/bienvenidos1.png'
 import firma1 from '../../public/img/firma1.jpg'
 import { Handshake, Rows4,Map } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
+import trofeo1 from '../../public/img/trofeo1.png'
+import trofeo2 from '../../public/img/trofeo2.png'
+import trofeo3 from '../../public/img/trofeo3.png'
+import trofeo4 from '../../public/img/trofeo4.png'
+import manos from '../../public/img/manos.png'
+import youtube from '../../public/img/youtube.png'
+import imgForm from '../../public/img/img_form.png'
 
 const Home = () => {
 
@@ -115,6 +122,116 @@ const Home = () => {
             </div>
             <div className='w-full flex justify-center'>
               <img src={firma1} alt="Firma Villanueva Abogados" />
+            </div>
+          </div>
+        </section>
+        <section className='bg-[#161616] flex flex-col w-full justify-center items-center text-white'>
+          <div className='flex flex-col w-[70%] gap-y-5 py-10'>
+            <div>
+              <h2 className='text-4xl font-semibold border-l-4 border-amber-300 pl-5'>RECONOCIMIENTOS</h2>
+            </div>
+            <div className='flex gap-x-3 justify-between'>
+              <img className='w-[20%] h-[20%] ' src={trofeo1} alt="Trofeo 1" />
+              <img className='w-[20%] h-[20%] ' src={trofeo2} alt="Trofeo 2" />
+              <img className='w-[20%] h-[20%] ' src={trofeo3} alt="Trofeo 3" />
+              <img className='w-[20%] h-[20%] ' src={trofeo4} alt="Trofeo 4" />
+            </div>
+          </div>
+        </section>
+        <section className='w-full flex flex-col justify-center items-center pb-15'>
+          <div className='w-[60%] flex justify-between items-center py-15'>
+            <div>
+              <h2 className='text-3xl border-l-6 border-amber-200 pl-3 font-semibold'>AREAS DE PRÁCTICA</h2>
+            </div>
+            <div className='w-[50%]'>
+              <p>Enfocamos nuestra práctica en dar solución a asuntos legales de alta complejidad, nos apasiona los retos y buscamos la excelencia en el servicio que brindamos a través de un equipo experimentado con altos estándares de ética y sentido de responsabilidad.</p>
+            </div>
+          </div>
+          <div className='flex w-full justify-center items-center '>
+            <div>
+              <img src={manos} className='w-150 h-150'></img>
+            </div>
+            <div className='flex flex-col'>
+              <div className='bg-[#E3E3E3] flex py-5 border-y-2 pl-3'>
+                <div className='px-4 flex items-center bg-[#4A4949] text-white text-2xl'>1</div>
+                <div className='px-5'>
+                  <p>ASESORIA A TRABAJADORES</p>
+                  <a href="">Ver más</a>
+                </div>
+              </div>
+              <div className='bg-[#E3E3E3] flex py-5 border-b-2 pl-3'>
+                <div className='px-4 flex items-center bg-[#4A4949] text-white text-2xl'>2</div>
+                <div className='px-5'>
+                  <p>ASESORIA A ORGANIZACIONES SINDICALES</p>
+                  <a href="">Ver más</a>
+                </div>
+              </div>
+              <div className='bg-[#E3E3E3] flex py-5 border-b-2 pl-3'>
+                <div className='px-4 flex items-center bg-[#4A4949] text-white text-2xl'>3</div>
+                <div className='px-5'>
+                  <p>ASESORIA A EMPRESAS</p>
+                  <a href="">Ver más</a>
+                </div>
+              </div>
+              <div className='bg-[#E3E3E3] flex py-5 border-b-2 pl-3'>
+                <div className='px-4 flex items-center bg-[#4A4949] text-white text-2xl'>4</div>
+                <div className='px-5'>
+                  <p>INSPECCIONES LABORALES</p>
+                  <a href="">Ver más</a>
+                </div>
+              </div >
+              <div className='bg-[#E3E3E3] flex py-5 border-b-2 pl-3'>
+                <div className='px-4 flex items-center bg-[#4A4949] text-white text-2xl'>5</div>
+                <div className='px-5'>
+                  <p>RECUPERACIONES Y COBRANZAS LEGALES</p>
+                  <a href="">Ver más</a>
+                </div>  
+              </div>
+              <div></div>
+            </div>
+          </div>
+        </section>
+        <section className='bg-[#161616] w-full flex flex-col justify-center items-center text-white py-10'>
+          <div className='w-[70%] flex flex-col justify-center items-center'>
+            <div className='flex items-start w-full pb-5'>
+              <h2 className='text-4xl font-semibold text-white border-l-6 border-amber-300 pl-3'>LEGAL TV</h2>
+            </div>
+            <div className='grid grid-cols-2 gap-y-5 gap-x-10'>
+              <iframe width="550" height="315" src="https://www.youtube.com/embed/DpROLIYRnSU" title="Constitución de empresas" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+              <iframe width="550" height="315" src="https://www.youtube.com/embed/et9Y9U6aqXk" title="Empleabilidad de los jóvenes" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+              <iframe width="550" height="315" src="https://www.youtube.com/embed/LXK3jTHA1zE" title="Licencia por maternidad" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+              <iframe width="550" height="315" src="https://www.youtube.com/embed/4S0wv6dU2yc" title="Trabajadores CAS" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            </div>
+            <div className='py-10 text-2xl font-semibold flex flex-col items-center'>
+              <h2>Mira más videos en nuestro canal de Youtube Legal TV:</h2>
+              <img src={youtube} alt="Youtube Channel" />
+            </div>
+          </div>
+        </section>
+        <section className='bg-white flex w-full'>
+          <div className='my-20 bg-[#FAFBFE] flex items-center justify-center gap-x-10 py-10'>
+            <div className='flex w-[80%] gap-x-10 items-center'>
+              <div className='border-8 border-black h-full w-full'>
+                <div className='px-20 py-5'>
+                  <h2 className='text-2xl font-semibold border-b-2 py-2'>Envíanos tu consulta</h2>
+                </div>
+                <form action="" className='flex flex-col py-5 px-20 gap-y-5 w-full h-full'>
+                  <input type="text" placeholder='Nombre' className='px-2 py-3 border-1'/>
+                  <input type="text" placeholder='Celular' className='px-2 py-3 border-1'/>
+                  <input type="text" placeholder='Email' className='px-2 py-3 border-1'/>
+                  <textarea name="" id="" placeholder='Mensaje' className='px-2 py-3 border-1'></textarea>
+                  <button className='p-3 border-1 bg-black text-[#E3B576] rounded-3xl cursor-pointer hover:text-black hover:bg-[#E3B576] hover:border-1 transition-all duration-200 ' type='submit'>Enviar</button>
+                </form>
+              </div>
+              <div className='w-full flex flex-col items-center justify-center'>
+                <div className='flex flex-col items-center justify-center mb-10'>
+                  <h2 className='font-semibold text-3xl pb-3'>CONSULTAS:</h2>
+                  <p className='w-[50%] min-w-[50%] text-justify'>ATENCIÓN A NIVEL NACIONAL CONSULTA PRESENCIAL Y ONLINE Reserve su cita por las siguientes vías: -Llamando a la central (+51) 1 7481222 -Utilizando el formulario de nuestra sección contáctenos. -Escribiendo al correo contacto@estudiovillanueva.pe -Mediante la mensajería instantánea WhatsApp que aparece en nuestra página.</p>
+                </div>
+                <div>
+                  <img src={imgForm} alt="" />
+                </div>
+              </div>
             </div>
           </div>
         </section>
