@@ -1,4 +1,5 @@
 import express from "express";
+import { supabase } from "./config/db.js";
 import { PORT } from "./config/config.js";
 import authRoutes from "./routes/authRoutes.js";
 
@@ -8,6 +9,10 @@ const app = express();
 app.use(express.json());
 
 app.use("/api/auth", authRoutes);
+app.get("/test-db", async (req, res) => {
+  const data = await supabase.from("db_role").select("*");
+  return res.json({ ok: true, data });
+});
 
 app.listen(PORT, () =>
   console.log(`Server is running on port ${PORT}`)
