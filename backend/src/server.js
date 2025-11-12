@@ -1,19 +1,19 @@
-
-require("dotenv").config();
-const express = require("express");
-const authRoutes = require("./routes/authRoutes");
-const db = require("./models");
+import express from "express";
+import { supabase } from "./config/db.js";
+import { PORT } from "./config/config.js";
+import authRoutes from "./routes/authRoutes.js";
 
 const app = express();
-const PORT = process.env.PORT || 4000;
 
+// app.use(cors());
 app.use(express.json());
 
 app.use("/api/auth", authRoutes);
-
-db.sequelize.sync({ alter: true }).then(() => {
-  console.log("Modelos sincronizados con MySQL");
-  app.listen(PORT, () => console.log(`Servidor en http://localhost:${PORT}`));
-}).catch(err => {
-  console.error("Error al sincronizar modelos:", err);
+app.get("/test-db", async (req, res) => {
+  const data = await supabase.from("db_role").select("*");
+  return res.json({ ok: true, data });
 });
+
+app.listen(PORT, () =>
+  console.log(`Server is running on port ${PORT}`)
+);

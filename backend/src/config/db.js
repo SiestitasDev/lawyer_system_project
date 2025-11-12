@@ -1,17 +1,10 @@
-// src/config/db.js
-const { Sequelize } = require("sequelize");
-require("dotenv").config();
+import { createClient } from "@supabase/supabase-js";
+import { DATABASE_URL, DATABASE_KEY } from "../config/config.js";
 
-const sequelize = new Sequelize(
-  process.env.DB_NAME,
-  process.env.DB_USER,
-  process.env.DB_PASS,
-  {
-    host: process.env.DB_HOST,
-    dialect: "mysql",
-    port: process.env.DB_PORT,
-    logging: false,
-  }
+export const supabase = createClient(
+    DATABASE_URL,
+    DATABASE_KEY,
+    {
+        auth: { persistSession: false }
+    }
 );
-
-module.exports = sequelize;
