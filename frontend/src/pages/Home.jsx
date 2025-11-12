@@ -1,7 +1,7 @@
 import Slider1 from '../../public/img/slider1.jpg'
 import Bienvenidos1 from '../../public/img/bienvenidos1.png'
 import firma1 from '../../public/img/firma1.jpg'
-import { Handshake, Rows4,Map } from 'lucide-react'
+import { Handshake, Rows4,Map, MessageCircleMore, ScrollText, Scale, House } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import trofeo1 from '../../public/img/trofeo1.png'
 import trofeo2 from '../../public/img/trofeo2.png'
@@ -10,6 +10,10 @@ import trofeo4 from '../../public/img/trofeo4.png'
 import manos from '../../public/img/manos.png'
 import youtube from '../../public/img/youtube.png'
 import imgForm from '../../public/img/img_form.png'
+import bgDatos from '../../public/img/bg_datos.jpg'
+import { DataCards } from '../components/DataCards'
+import diners from '../../public/img/diners.png'
+import footerLogo from '../../public/img/footer_logo.png'
 
 const Home = () => {
 
@@ -23,11 +27,24 @@ const Home = () => {
         </div>
         <div className="w-full pr-10">
           <ul className="w-full text-white flex justify-between items-center">
-            <li className="flex items-center justify-center w-full">Inicio</li>
-            <li className="flex items-center justify-center w-full">Nuestra firma</li>
-            <li className="flex items-center justify-center w-full">Especialidades</li>
-            <li className="flex items-center justify-center w-full">Contacto</li>
-            <li className="flex items-center justify-center w-full bg-yellow-500 py-2 text-black font-semibold cursor-pointer hover:bg-yellow-400">Llamenos al 991-259-680</li>
+            <li className="flex items-center justify-center w-full">
+              <a href="#inicio">Inicio</a>
+            </li>
+            <li className="flex items-center justify-center w-full">
+              <a href="#nuestra-firma">Nuestra firma</a>
+            </li>
+            <li className="flex items-center justify-center w-full">
+              <a href="#areas-practica">Areas de práctica</a>
+            </li>
+            <li className="flex items-center justify-center w-full">
+              <a href="#legal-tv">Legal TV</a>
+            </li>
+            <li className="flex items-center justify-center w-full">
+              <a href="#contacto">Contáctenos</a>
+            </li>
+            <li className="flex items-center justify-center w-full bg-yellow-500 py-2 text-black font-semibold cursor-pointer hover:bg-yellow-400">
+              Llamenos al 991-259-680
+            </li>
           </ul>
         </div>
       </header>
@@ -93,7 +110,7 @@ const Home = () => {
             </div>
           </div>
         </section>
-        <section className='bg-[#575757] flex flex-col justify-center items-center text-white w-full py-10'>
+        <section id='nuestra-firma' className='bg-[#575757] flex flex-col justify-center items-center text-white w-full py-10'>
           <div className='w-[60%] '>
             <div>
               <h1 className='text-4xl font-semibold border-l-8 border-orange-300 pl-8'>Nuestra firma</h1>
@@ -138,7 +155,7 @@ const Home = () => {
             </div>
           </div>
         </section>
-        <section className='w-full flex flex-col justify-center items-center pb-15'>
+        <section id='areas-practica' className='w-full flex flex-col justify-center items-center pb-15'>
           <div className='w-[60%] flex justify-between items-center py-15'>
             <div>
               <h2 className='text-3xl border-l-6 border-amber-200 pl-3 font-semibold'>AREAS DE PRÁCTICA</h2>
@@ -191,7 +208,7 @@ const Home = () => {
             </div>
           </div>
         </section>
-        <section className='bg-[#161616] w-full flex flex-col justify-center items-center text-white py-10'>
+        <section id='legal-tv' className='bg-[#161616] w-full flex flex-col justify-center items-center text-white py-10'>
           <div className='w-[70%] flex flex-col justify-center items-center'>
             <div className='flex items-start w-full pb-5'>
               <h2 className='text-4xl font-semibold text-white border-l-6 border-amber-300 pl-3'>LEGAL TV</h2>
@@ -232,6 +249,58 @@ const Home = () => {
                   <img src={imgForm} alt="" />
                 </div>
               </div>
+            </div>
+          </div>
+        </section>
+        <section className='w-full'>
+          <div className='relative text-white'>
+            <img src={bgDatos} alt="" className='w-full h-60'/>
+            <div className='absolute inset-0 grid grid-cols-4'>
+              <DataCards icon={MessageCircleMore} data={"21,900"} text={"Consultas atendidas"} />
+              <DataCards icon={ScrollText} data={"15,500"} text={"Demandas elaboradas"} />
+              <DataCards icon={Scale} data={"10,200"} text={"Juicios ganados"} />
+              <DataCards icon={House} data={"5"} text={"Juicios y Demandas en proceso"} />
+            </div>
+          </div>
+        </section>
+        <section>
+          <div className='flex flex-col justify-center items-center gap-y-5 py-10'>
+            <div>
+              <h2 className='font-semibold text-3xl'>Trabajamos con todas las tarjetas</h2>
+            </div>
+            <div>
+              <img src={diners} alt="tarjetas" />
+            </div>
+          </div>
+        </section>
+        <section id='contacto' className='bg-black text-white w-full flex justify-center items-center py-10 px-20'>
+          <div className='grid grid-cols-3 gap-x-10 w-[80%]'>
+            <div className='flex flex-col items-center'>
+              <img src={footerLogo} alt="logo footer" />
+              <p className='text-justify'>
+                Firma Legal Especializada en Defensa Legal y Asesoramiento Integral. Desde 1995 te ayudamos a encontrar soluciones eficaces a los problemas más complejos.
+              </p>
+            </div>
+            <div>
+              <h2 className='text-3xl pb-3'>CONTÁCTENOS</h2>
+              <div>Sede Central: Av. Javier Prado Este 210 tercer piso - San Isidro. Lima – Perú</div>
+              <div>Central de atención: (+51) 1 7481222 Cel: 993740402</div>
+              <div>contacto@estudiovillanueva.pe</div>
+            </div>
+            <div>
+              <h2 className='text-3xl pb-3'>UBÍQUENOS</h2>
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d15605.149700587372!2d-77.032061!3d-12.092465000000002!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9105c8f32445fa8d%3A0x978040eec0aea8d2!2sEstudio%20Villanueva%20Abogados%20-%20Asesor%C3%ADa%20legal%20en%20todas%20las%20especialidades.!5e0!3m2!1ses!2spe!4v1762964909651!5m2!1ses!2spe"
+                width="330"
+                height="250"
+                style={{ border: 0 }}
+                title="Ubicación Estudio Villanueva"
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowFullScreen
+              />
             </div>
           </div>
         </section>
