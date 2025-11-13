@@ -2,23 +2,23 @@ import jwt from "jsonwebtoken";
 import { JWT_SECRET } from "../config/config.js";
 
 export const authorizeRequest = async (req, res, next) => {
-
+    let message = "Solicitud no autorizada"
+    let status = 401;
     let header = req.headers.Authorization || req.headers.authorization;
 
     if (!header || !header.startsWith("Bearer")) {
-        return next({ status: 401, message: "Solicitud no autorizada" });
+        return next({ status, message });
     }
 
     const token = header.split(" ")[1];
 
     if (!token) {
-        return next({ status: 401, message: "Solicitud no autorizada" });
+        return next({ status, message });
     }
 
-
-    jwt.verify(token, process.env.JWT_PASS, async (err, decoded) => {
+    jwt.verify(token, JWT_SECRET, async (err, decoded) => {
         if (err) {
-            return next({ status: 401, message: "Solicitud no autorizada" });
+            return next({ status, message });
         }
 
         // Falta validar en la base de datos si existe el usuario y si está activo
@@ -30,7 +30,7 @@ export const authorizeRequest = async (req, res, next) => {
 
         // // If user is not found
         // if (!user) {
-        //     return next({ status: 401, message: "Unauthorized request" });
+        //     return next({ status, message });
         // }
 
         // Attach the user to the request object
