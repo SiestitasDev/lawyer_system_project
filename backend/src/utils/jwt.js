@@ -39,7 +39,7 @@ export const authorizeRequest = async (req, res, next) => {
     });
 }
 
-export const generateJWT = async (userId, userName, role) => {
+export const generateJWT = async (userId, userName, role, expires = "1h") => {
     let token = jwt.sign(
         {
             id: userId,
@@ -48,7 +48,7 @@ export const generateJWT = async (userId, userName, role) => {
         },
         JWT_SECRET,
         {
-            expiresIn: "1h",
+            expiresIn: expires,
         }
     );
     return token;

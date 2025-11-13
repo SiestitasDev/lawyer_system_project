@@ -1,5 +1,5 @@
 import { supabase } from '../config/db.js';
-import { NotFoundError, DatabaseError } from '../utils/errors.js';
+import { NotFoundError, DatabaseError } from '../errors/errors.js';
 
 export const RoleService = {
     async getRoleById(id) {
@@ -17,7 +17,7 @@ export const RoleService = {
             throw new DatabaseError("Error consultando la base de datos.", error.message);
         }
 
-        return data;
+        return {"success": true, "role": data};
     },
 
     async getRoleByCode(code) {

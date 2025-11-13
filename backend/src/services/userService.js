@@ -1,6 +1,6 @@
 import { supabase } from "../config/db.js";
-import { DatabaseError } from "../utils/errors.js";
-import { hashPassword } from "../utils/passwordUtils.js";
+import { DatabaseError } from "../errors/errors.js";
+import { hashPassword, verifyPassword} from "../utils/passwordUtils.js";
 
 export const userService = {
     async getUserByEmail(email){
@@ -56,6 +56,10 @@ export const userService = {
         }
 
         return {"success": true, "message": "Usuario creado exitosamente."};
+    },
+
+    async validatePassword(plainPassword, hashedPassword) {
+        return await verifyPassword(plainPassword, hashedPassword);
     }
 
 };

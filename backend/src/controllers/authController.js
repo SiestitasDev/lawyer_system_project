@@ -1,5 +1,8 @@
 import { User } from "../models/User.js";
 import { userService } from "../services/userService.js";
+import { RoleService } from "../services/roleService.js";
+import { generateJWT } from "../utils/jwt.js";
+import { BadRequestError, NotFoundError, UnauthorizedError } from "../errors/errors.js";
 
 export const Register = async (req, res) => {
     const userInfo = new User(req.body);
@@ -7,34 +10,52 @@ export const Register = async (req, res) => {
     const { success, missingFields } = userInfo.validateFields();
     
     if (!success) {
-        return res.status(400).json({
-            success: false,
-            message: "Faltan campos obligatorios",
-            detail: missingFields,
-        });
+        throw new NotFoundError("Faltan campos obligatorios.", missingFields);
     }
 
     const existingUser = await userService.getUserByEmail(userInfo.email);
 
     if (existingUser.success) {
-        return res.status(400).json({
-            success: false,
-            message: "El usuario ya existe.",
-        });
+        throw new ConflictError("El usuario ya existe.");
     }
 
     const creationResult = await userService.createUser(userInfo);
 
     if (!creationResult.success) {
-        return res.status(500).json({
-            success: false,
-            message: "Error al crear el usuario.",
-        });
+        throw new DatabaseError("Error al crear el usuario.");
     }
 
 	res.json({ success: true, message: "Registro exitoso" });
 };
 
 export const Login = async (req, res) => {
-	res.json({ success: true, message: "Login" });
+
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+        throw new BadRequestError("Email y contraseña son obligatorios.");
+    }
+
+    const existingUser = await userService.getUserByEmail(email);
+
+    if (!existingUser.success) {
+        throw new NotFoundError(existingUser.message);
+    }
+    
+    const isPasswordValid = await userService.validatePassword(password, existingUser.user.password_hash);
+
+    if (!isPasswordValid) {
+        throw new UnauthorizedError("Credenciales inválidas.");
+    }
+
+    const { success, role } = await RoleService.getRoleById(existingUser.user.role_id);
+
+    if (!success) {
+        throw new NotFoundError("Rol no encontrado.");
+    }
+
+    const token = await generateJWT(existingUser.user.id, existingUser.user.name, role.code);
+    const refreshToken = await generateJWT(existingUser.user.id, existingUser.user.name, role.code, "1d");
+
+	res.json({ success: true, token_type: "Bearer", access_token : token, refresh_token: refreshToken,  expire: null});
 };

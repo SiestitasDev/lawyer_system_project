@@ -1,7 +1,6 @@
-import { AppError } from '../utils/AppError.js';
+import { AppError } from '../errors/AppError.js';
 
 export const errorMiddleware = (err, req, res, next) => {
-    console.error("🔥 ERROR:", err);
 
     if (err instanceof AppError) {
         return res.status(err.statusCode).json({
