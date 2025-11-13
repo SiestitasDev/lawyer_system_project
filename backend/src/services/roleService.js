@@ -35,6 +35,6 @@ export const RoleService = {
             throw new DatabaseError("Error consultando la base de datos.", error.message);
         }
 
-        return data;
-}
+        return {"success": true, "role": data};
+    }
 };
