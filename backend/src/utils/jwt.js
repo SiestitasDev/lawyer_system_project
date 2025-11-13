@@ -1,42 +1,38 @@
 import jwt from "jsonwebtoken";
 import { JWT_SECRET } from "../config/config.js";
+import { UnauthorizedError } from "../errors/errors.js";
 
 export const authorizeRequest = async (req, res, next) => {
-    let message = "Solicitud no autorizada"
-    let status = 401;
-    let header = req.headers.Authorization || req.headers.authorization;
+    let header = req.headers.authorization || req.headers.Authorization;
 
-    if (!header || !header.startsWith("Bearer")) {
-        return next({ status, message });
+    if (!header || !header.startsWith("Bearer ")) {
+        throw new UnauthorizedError("Token inválido");
     }
 
     const token = header.split(" ")[1];
 
     if (!token) {
-        return next({ status, message });
+        throw new UnauthorizedError("Token inválido");
     }
 
-    jwt.verify(token, JWT_SECRET, async (err, decoded) => {
-        if (err) {
-            return next({ status, message });
-        }
+    const decoded = jwt.verify(token, JWT_SECRET); // { id, name, role }
 
-        // Falta validar en la base de datos si existe el usuario y si está activo
-        // Query the database for the user
-        // let user = await User.findOne({
-        //     where: { id: decoded.id, is_active: true, blocked: false },
-        //     attributes: { exclude: ['password', 'is_active', 'blocked'] }
-        // });
+    const { success, message, user } = await userService.getUserById(decoded.id);
 
-        // // If user is not found
-        // if (!user) {
-        //     return next({ status, message });
-        // }
+    if (!success) {
+      throw new UnauthorizedError(message);
+    }
 
-        // Attach the user to the request object
-        // req.user = user;
-        return next();
-    });
+    req.user = {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role_id: user.role_id,
+        role: decoded.role,
+        is_active: user.is_active,
+    };
+
+    return next();
 }
 
 export const generateJWT = async (userId, userName, role, expires = "1h") => {
@@ -44,7 +40,7 @@ export const generateJWT = async (userId, userName, role, expires = "1h") => {
         {
             id: userId,
             name: userName,
-            role,
+            role, // 'ADMIN' | 'LAWYER' | 'CLIENT'
         },
         JWT_SECRET,
         {

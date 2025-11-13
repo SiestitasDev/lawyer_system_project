@@ -28,6 +28,30 @@ export const userService = {
         return { success: true, user: data };
     },
 
+    async getUserById(id){
+        const { data, error } = await supabase
+            .from('db_user')
+            .select('id, name, email, is_active, role_id')
+            .eq('id', id)
+            .single();
+        
+        if (error) {
+            if (error?.code === 'PGRST116') {
+                return { success: false, message: 'Usuario no existe con ese ID.' };
+            }
+        }
+
+        if (!data) {
+            return { success: false, message: 'Usuario no existe con ese ID.' };
+        }
+
+        if (!data.is_active) {
+            return { success: false, message: 'El usuario existe pero no está activo.' };
+        }
+
+        return { success: true, user: data};
+    },
+
     async createUser(userInfo) {
 
         const password_hash = await hashPassword(userInfo.password);

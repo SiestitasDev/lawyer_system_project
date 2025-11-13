@@ -1,14 +1,14 @@
 import Roles from '../config/roles.json';
+import { UnauthorizedError } from '../errors/errors.js';
 
-function checkRole(rolesPermitidos) {
+function checkRole(...allowedRoles) {
     return (req, res, next) => {
-        // obtener roles del jwt del usuario
-        // Como se obteniene Payload del token
-        // userRole = r
+        const userRole = req.user?.role;
 
-        // if (!rolesPermitidos.includes(req.user.rol)) {
-        //     return res.status(403).json({ message: "Acceso denegado" });
-        // }
+        if (!userRole || !allowedRoles.includes(userRole)) {
+            throw new UnauthorizedError("No tienes permiso para acceder a este recurso.");
+        }
+
         next();
     };
 }
