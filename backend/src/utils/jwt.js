@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
 import { JWT_SECRET } from "../config/config.js";
 import { UnauthorizedError } from "../errors/errors.js";
+import { userService } from "../services/userService.js";
 
 export const authorizeRequest = async (req, res, next) => {
     let header = req.headers.authorization || req.headers.Authorization;
@@ -17,19 +18,19 @@ export const authorizeRequest = async (req, res, next) => {
 
     const decoded = jwt.verify(token, JWT_SECRET); // { id, name, role }
 
-    const { success, message, user } = await userService.getUserById(decoded.id);
+    const { success, message, data } = await userService.getUserById(decoded.id);
 
     if (!success) {
       throw new UnauthorizedError(message);
     }
 
     req.user = {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        role_id: user.role_id,
+        id: data.id,
+        name: data.name,
+        email: data.email,
+        role_id: data.role_id,
         role: decoded.role,
-        is_active: user.is_active,
+        is_active: data.is_active,
     };
 
     return next();

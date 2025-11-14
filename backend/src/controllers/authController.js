@@ -42,20 +42,20 @@ export const Login = async (req, res) => {
         throw new NotFoundError(existingUser.message);
     }
     
-    const isPasswordValid = await userService.validatePassword(password, existingUser.user.password_hash);
+    const isPasswordValid = await userService.validatePassword(password, existingUser.data.password_hash);
 
     if (!isPasswordValid) {
         throw new UnauthorizedError("Credenciales inválidas.");
     }
 
-    const { success, role } = await RoleService.getRoleById(existingUser.user.role_id);
+    const { success, role } = await RoleService.getRoleById(existingUser.data.role_id);
 
     if (!success) {
         throw new NotFoundError("Rol no encontrado.");
     }
 
-    const token = await generateJWT(existingUser.user.id, existingUser.user.name, role.code);
-    const refreshToken = await generateJWT(existingUser.user.id, existingUser.user.name, role.code, "1d");
+    const token = await generateJWT(existingUser.data.id, existingUser.data.name, role.code);
+    const refreshToken = await generateJWT(existingUser.data.id, existingUser.data.name, role.code, "1d");
 
 	res.json({ success: true, token_type: "Bearer", access_token : token, refresh_token: refreshToken,  expire: null});
 };

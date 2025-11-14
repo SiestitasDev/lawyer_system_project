@@ -3,6 +3,27 @@ import { DatabaseError } from "../errors/errors.js";
 import { hashPassword, verifyPassword} from "../utils/passwordUtils.js";
 
 export const userService = {
+    async getAllUsers(roleUser) {
+        
+        let query = supabase
+            .from('db_user')
+            .select('id, name, email, is_active, role_id');
+
+        if (roleUser) {
+            query = query.eq('role_id', roleUser);
+        }
+
+        const { data, error } = await query;
+
+        if (error) {
+            if (error?.code === 'PGRST116') {
+                return { success: true, users: [] };
+            }
+            throw new DatabaseError("Error obteniendo los usuarios de la base de datos.", error.message);
+        }
+
+        return { success: true, data };
+    },
     async getUserByEmail(email){
         const { data, error } = await supabase
             .from('db_user')
@@ -25,7 +46,7 @@ export const userService = {
             return { success: false, message: 'El usuario existe pero no está activo.' };
         }
 
-        return { success: true, user: data };
+        return { success: true, data };
     },
 
     async getUserById(id){
@@ -33,12 +54,14 @@ export const userService = {
             .from('db_user')
             .select('id, name, email, is_active, role_id')
             .eq('id', id)
-            .single();
+            .single()
+            .maybeSingle();
         
         if (error) {
             if (error?.code === 'PGRST116') {
                 return { success: false, message: 'Usuario no existe con ese ID.' };
             }
+            throw new DatabaseError(`Error obteniendo el usuario con ID ${id} de la base de datos.`, error.message);
         }
 
         if (!data) {
@@ -49,7 +72,7 @@ export const userService = {
             return { success: false, message: 'El usuario existe pero no está activo.' };
         }
 
-        return { success: true, user: data};
+        return { success: true, data};
     },
 
     async createUser(userInfo) {
