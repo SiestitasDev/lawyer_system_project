@@ -3,6 +3,7 @@ import { supabase } from "./config/db.js";
 import { PORT } from "./config/config.js";
 import authRoutes from "./routes/authRoutes.js";
 import typeCaseRoutes from "./routes/typeCaseRoutes.js";
+import lawyerRoutes from "./routes/lawyerRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import { errorMiddleware } from "./middlewares/errorMiddleware.js";
 
@@ -14,6 +15,7 @@ app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/type-cases", typeCaseRoutes);
 app.use("/api/user", userRoutes);
+app.use("/api/admin/lawyers", lawyerRoutes);
 
 app.use(errorMiddleware);
 
