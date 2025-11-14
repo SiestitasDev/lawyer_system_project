@@ -1,7 +1,6 @@
-import Roles from '../config/roles.json';
 import { UnauthorizedError } from '../errors/errors.js';
 
-function checkRole(...allowedRoles) {
+export function checkRole(...allowedRoles) {
     return (req, res, next) => {
         const userRole = req.user?.role;
 
@@ -12,5 +11,3 @@ function checkRole(...allowedRoles) {
         next();
     };
 }
-
-module.exports = checkRole;
