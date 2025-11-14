@@ -12,14 +12,19 @@ export class User {
         this.address = address;
     }
 
-    toUser(password_hash) {
-        return {
+    toUser(password_hash = null) {
+        const data = {
             name: this.name,
             email: this.email,
-            password_hash,
             role_id: this.role_id,
             is_active: true,
         };
+
+        if (password_hash) {
+            data.password_hash = password_hash;
+        }
+
+        return data;
     }
 
     toPartner(user_id) {

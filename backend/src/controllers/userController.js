@@ -1,5 +1,6 @@
 import { BadRequestError } from "../errors/errors.js";
 import { userService } from "../services/userService.js";
+import { User } from "../models/User.js";
 
 export const getAllUsers = async (req, res) => {
     let roleUser = req.query.role || null;
@@ -27,4 +28,17 @@ export const getUserById = async (req, res) => {
     }
 
     res.json({ success: true, data: [user.data] });
+};
+
+export const updateUser = async (req, res) => {
+    let userId = req.params.id || null;
+    const userInfo = new User(req.body);
+
+    const updatedUser = await userService.updateUser(userId, userInfo);
+
+    if (!updatedUser.success) {
+        throw new BadRequestError(updatedUser.message);
+    }
+
+    res.json({ success: true, message: updatedUser.message });
 };

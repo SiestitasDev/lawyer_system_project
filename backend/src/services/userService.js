@@ -24,6 +24,33 @@ export const userService = {
 
         return { success: true, data };
     },
+    async updateUser(userId, userInfo) {
+        const userData = userInfo.toUser();
+        const { data: user, error: userError } = await supabase
+            .from('db_user')
+            .update(userData)
+            .eq('id', userId)
+            .select()
+            .single();
+
+        if (userError) {
+            throw new DatabaseError(`Error actualizando el usuario con ID ${userId}.`, userError.message);
+        }
+
+        const partnerData = userInfo.toPartner(userId);
+        const { data: partner, error: partnerError } = await supabase
+            .from('db_partner')
+            .update(partnerData)
+            .eq('user_id', userId)
+            .select()
+            .single();
+        
+        if (partnerError) {
+            throw new DatabaseError(`Error actualizando el partner asociado al usuario con ID ${userId}.`, partnerError.message);
+        }
+
+        return { success: true, message: 'Usuario actualizado exitosamente.' };
+    },
     async getUserByEmail(email){
         const { data, error } = await supabase
             .from('db_user')
