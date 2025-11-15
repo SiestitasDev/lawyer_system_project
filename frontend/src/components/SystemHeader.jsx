@@ -33,7 +33,8 @@ export const SystemHeader = ({ role }) => {
           <>
             <button className="text-white">Inicio</button>
             <button onClick={() => navigate('/system/profile')} className="text-white">Perfil</button>
-            <button className="text-white">Gestión de abogados</button>
+            <button onClick={() => navigate('/system/clients')} className="text-white">Gestión de clientes</button>
+            <button onClick={() => navigate('/system/lawyers')} className="text-white">Gestión de abogados</button>
             <button className="text-white">Gestión de Administradores</button>
             <button className="text-white">Gestión de citas</button>
           </>
