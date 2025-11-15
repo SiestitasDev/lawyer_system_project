@@ -1,6 +1,8 @@
 import { useState } from "react"
 import loginLogo from '../../public/img/login_lawyer_1.jpg'
 import { useNavigate } from 'react-router-dom'
+import { loginService } from "../services/auth/loginService"
+import {jwtDecode} from "jwt-decode"
 
 export const Login = () => {
 
@@ -9,10 +11,22 @@ export const Login = () => {
   const [ username, setUsername ] = useState('')
   const [ password, setPassword ] = useState('')
 
-  const loginFetch = (e) => {
+  const loginFetch = async (e) => {
     e.preventDefault()
-  }
+    try {
+      const { token } =  await loginService(username, password)
 
+      // Decode token to get user info (if needed)
+      const decodedToken = jwtDecode(token)
+      console.log('User data:', decodedToken)
+
+      localStorage.setItem('login_token', token)
+      navigate('/system')
+    } catch (error) {
+      console.error('Login failed:', error)
+    }
+  }
+ 
   return (
     <div className="flex flex-col items-center justify-center h-screen text-black bg-gray-200">
       <div className="flex w-[65%] h-[70%] shadow-lg rounded-lg overflow-hidden">
