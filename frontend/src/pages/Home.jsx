@@ -1,7 +1,7 @@
 import Slider1 from '../../public/img/slider1.jpg'
 import Bienvenidos1 from '../../public/img/bienvenidos1.png'
 import firma1 from '../../public/img/firma1.jpg'
-import { Handshake, Rows4,Map, MessageCircleMore, ScrollText, Scale, House } from 'lucide-react'
+import { Handshake, Rows4,Map, MessageCircleMore, ScrollText, Scale, House, CircleUserRound, User, Calendar, LogOut } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import trofeo1 from '../../public/img/trofeo1.png'
 import trofeo2 from '../../public/img/trofeo2.png'
@@ -14,10 +14,35 @@ import bgDatos from '../../public/img/bg_datos.jpg'
 import { DataCards } from '../components/DataCards'
 import diners from '../../public/img/diners.png'
 import footerLogo from '../../public/img/footer_logo.png'
+import { useEffect, useState } from 'react'
+
 
 const Home = () => {
 
   const navigate = useNavigate()
+  const [userData, setUserData] = useState(null)
+  const [showMenu, setShowMenu] = useState(false)
+
+
+  useEffect(() => {
+    // Verificar si hay token y obtener datos del usuario
+    const token = localStorage.getItem('login_token')
+    const storedUserData = localStorage.getItem('user_data')
+    
+    if (token && storedUserData) {
+      setUserData(JSON.parse(storedUserData))
+    }
+  }, [])
+
+  const handleLogout = () => {
+    localStorage.removeItem('login_token')
+    localStorage.removeItem('user_data')
+    setUserData(null)
+    setShowMenu(false)
+    navigate('/login')
+  }
+
+
 
   return(
     <>
@@ -44,6 +69,59 @@ const Home = () => {
             </li>
             <li className="flex items-center justify-center w-full bg-yellow-500 py-2 text-black font-semibold cursor-pointer hover:bg-yellow-400">
               Llamenos al 991-259-680
+            </li>
+            <li className="flex items-center justify-center w-full relative">
+              {userData ? (
+                <div className="relative">
+                  <button 
+                    onClick={() => setShowMenu(!showMenu)}
+                    className="flex items-center gap-x-2 hover:text-yellow-400 cursor-pointer transition"
+                  >
+                    <CircleUserRound size={24} />
+                    <span>{userData.name}</span>
+                  </button>
+
+                  {showMenu && (
+                    <div className="absolute right-0 mt-2 w-48 bg-white text-black rounded-lg shadow-lg z-50">
+                      <button 
+                        onClick={() => {
+                          navigate('/profile')
+                          setShowMenu(false)
+                        }}
+                        className="w-full flex items-center gap-x-2 px-4 py-3 hover:bg-gray-100 transition rounded-t-lg"
+                      >
+                        <User size={18} />
+                        Ver perfil
+                      </button>
+                      <button 
+                        onClick={() => {
+                          navigate('/appointments')
+                          setShowMenu(false)
+                        }}
+                        className="w-full flex items-center gap-x-2 px-4 py-3 hover:bg-gray-100 transition border-t"
+                      >
+                        <Calendar size={18} />
+                        Mis citas
+                      </button>
+                      <button 
+                        onClick={handleLogout}
+                        className="w-full flex items-center gap-x-2 px-4 py-3 hover:bg-red-100 text-red-600 transition rounded-b-lg border-t"
+                      >
+                        <LogOut size={18} />
+                        Cerrar sesión
+                      </button>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <button 
+                  onClick={() => navigate('/login')}
+                  className="flex items-center gap-x-2 hover:text-yellow-400 cursor-pointer transition"
+                >
+                  <CircleUserRound size={24} />
+                  Iniciar sesión
+                </button>
+              )}
             </li>
           </ul>
         </div>

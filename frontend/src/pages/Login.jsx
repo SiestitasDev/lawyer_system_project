@@ -2,7 +2,7 @@ import { useState } from "react"
 import loginLogo from '../../public/img/login_lawyer_1.jpg'
 import { useNavigate } from 'react-router-dom'
 import { loginService } from "../services/auth/loginService"
-import {jwtDecode} from "jwt-decode"
+import { jwtDecode } from "jwt-decode"
 
 export const Login = () => {
 
@@ -16,12 +16,18 @@ export const Login = () => {
     try {
       const { token } =  await loginService(username, password)
 
-      // Decode token to get user info (if needed)
+      // Decode token to get user info 
       const decodedToken = jwtDecode(token)
       console.log('User data:', decodedToken)
 
       localStorage.setItem('login_token', token)
-      navigate('/system')
+      localStorage.setItem('user_data', JSON.stringify(decodedToken))
+
+      if(decodedToken.role === "CLIENT"){
+        navigate('/')
+      }else if(decodedToken.role === "LAWYER" || decodedToken.role === "ADMIN"){
+        navigate('/system')
+      }
     } catch (error) {
       console.error('Login failed:', error)
     }
