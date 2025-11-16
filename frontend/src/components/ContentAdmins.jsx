@@ -1,27 +1,30 @@
-import { getClients } from "../services/admin/adminService"
 import { useEffect, useState } from "react"
-import { Plus, Edit, Trash2 } from "lucide-react"
+import { getAdmins } from "../services/admin/adminService"
+import { Edit, Trash2, Plus } from 'lucide-react'
 
-export const ContentClients = () => {
+export const ContentAdmins = () => {
 
-  const [clients, setClients] = useState([])
+  const [admins, setAdmins] = useState([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const token = localStorage.getItem('login_token')
-    const fetchClients = async () => {
+    const fetchAdmins = async () => {
       try {
-        const data = await getClients(token)
-        console.log('Lista de clientes:', data)
-        setClients(data.data)
+        const data = await getAdmins(token)
+        console.log('Lista de admins:', data)
+        const filteredAdmins = Array.isArray(data.data) 
+          ? data.data.filter(admin => admin.role_id === 1)
+          : []
+        setAdmins(filteredAdmins)
       } catch (error) {
-        console.error('Error fetching clients:', error)
+        console.error('Error fetching admins:', error)
       } finally {
         setLoading(false)
       }
     }
 
-    fetchClients()
+    fetchAdmins()
   }, [])
 
   return (
@@ -29,28 +32,28 @@ export const ContentClients = () => {
       <div className="max-w-6xl mx-auto">
         <div className="flex justify-between items-center mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Gestión de Clientes</h1>
-            <p className="text-gray-600 mt-1">Total de clientes: {clients.length}</p>
+            <h1 className="text-3xl font-bold text-gray-900">Gestión de Administradores</h1>
+            <p className="text-gray-600 mt-1">Total de administradores: {admins.length}</p>
           </div>
           <button className="flex items-center gap-2 bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition">
             <Plus size={20} />
-            Nuevo cliente
+            Nuevo administrador
           </button>
         </div>
 
         {loading && (
           <div className="text-center py-12">
-            <p className="text-gray-500">Cargando clientes...</p>
+            <p className="text-gray-500">Cargando administradores...</p>
           </div>
         )}
 
-        {!loading && clients.length === 0 && (
+        {!loading && admins.length === 0 && (
           <div className="text-center py-12 bg-white rounded-lg border border-gray-200">
-            <p className="text-gray-500">No hay clientes registrados</p>
+            <p className="text-gray-500">No hay administradores registrados</p>
           </div>
         )}
 
-        {!loading && clients.length > 0 && (
+        {!loading && admins.length > 0 && (
           <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
             <table className="w-full">
               <thead>
@@ -63,18 +66,18 @@ export const ContentClients = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
-                {clients.map((client) => (
-                  <tr key={client.id} className="hover:bg-gray-50 transition">
-                    <td className="px-6 py-4 text-sm text-gray-900">{client.id}</td>
-                    <td className="px-6 py-4 text-sm text-gray-900 font-medium">{client.name}</td>
-                    <td className="px-6 py-4 text-sm text-gray-600">{client.email}</td>
+                {admins.map((admin) => (
+                  <tr key={admin.id} className="hover:bg-gray-50 transition">
+                    <td className="px-6 py-4 text-sm text-gray-900">{admin.id}</td>
+                    <td className="px-6 py-4 text-sm text-gray-900 font-medium">{admin.name}</td>
+                    <td className="px-6 py-4 text-sm text-gray-600">{admin.email}</td>
                     <td className="px-6 py-4 text-sm">
                       <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${
-                        client.is_active 
+                        admin.is_active 
                           ? 'bg-green-100 text-green-800' 
                           : 'bg-red-100 text-red-800'
                       }`}>
-                        {client.is_active ? "Activo" : "Inactivo"}
+                        {admin.is_active ? "Activo" : "Inactivo"}
                       </span>
                     </td>
                     <td className="px-6 py-4 text-sm">
@@ -97,3 +100,5 @@ export const ContentClients = () => {
     </div>
   )
 }
+
+export default ContentAdmins

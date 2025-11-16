@@ -32,7 +32,7 @@ export const System = () => {
   return (
     <div className="flex flex-col h-screen">
       <SystemHeader role={userData.role} />
-      <div>
+      <div className="flex-1 h-full overflow-auto">
         <Outlet context={userData} />
       </div>
     </div>

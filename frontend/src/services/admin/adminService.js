@@ -23,3 +23,15 @@ export const getClients = async (token) => {
     const data = await response.json()
     return data
 }
+
+export const getAdmins = async (token) => {
+    const response =  await fetch(`${API_URL}/user?role_id=1`, {
+        method: 'GET',
+        headers: {  
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }
+    })
+    const data = await response.json()
+    return data
+}

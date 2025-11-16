@@ -7,6 +7,7 @@ import ContentProfile from './components/ContentProfile'
 import ContentAppointments from './components/ContentAppointments'
 import { ContentLawyers } from './components/ContentLawyers'
 import { ContentClients } from './components/ContentClients'
+import ContentAdmins from './components/ContentAdmins'
 import PrivateRoute from './components/PrivateRoute/PrivateRoute'
 import Welcome from './components/Welcome'
 import { BrowserRouter as Router, Routes, Route} from 'react-router-dom'
@@ -24,6 +25,7 @@ function App() {
           <Route path='/system/appointments' element={<ContentAppointments />} />
           <Route path='/system/lawyers' element={<ContentLawyers />} />
           <Route path='/system/clients' element={<ContentClients />} />
+          <Route path='/system/admins' element={<ContentAdmins />} />
         </Route>
       </Routes>
     </Router>

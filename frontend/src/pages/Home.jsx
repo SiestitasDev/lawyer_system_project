@@ -85,7 +85,7 @@ const Home = () => {
                     <div className="absolute right-0 mt-2 w-48 bg-white text-black rounded-lg shadow-lg z-50">
                       <button 
                         onClick={() => {
-                          navigate('/profile')
+                          navigate('/system')
                           setShowMenu(false)
                         }}
                         className="w-full flex items-center gap-x-2 px-4 py-3 hover:bg-gray-100 transition rounded-t-lg"

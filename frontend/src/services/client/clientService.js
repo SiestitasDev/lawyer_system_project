@@ -29,3 +29,19 @@ export const getCitas = async (clientId, token) => {
     throw new Error('Error fetching appointments data', error)
   }
 }
+
+export const updateProfile = async (clientId, profileData, token) => {
+  try {
+    const response = await fetch(`${API_URL}/profile/me?${clientId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify(profileData)
+    })
+    return await response.json()
+  } catch (error) {
+    throw new Error('Error updating profile data', error)
+  }
+}
