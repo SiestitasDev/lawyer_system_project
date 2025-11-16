@@ -1,28 +1,34 @@
 import { useEffect, useState } from "react"
 import { getLawyers } from "../services/admin/adminService"
 import { Edit, Trash2, Plus } from 'lucide-react'
+import CreateLawyerModal from "./CreateLawyerModal"
 
 export const ContentLawyers = () => {
 
   const [lawyers, setLawyers] = useState([])
   const [loading, setLoading] = useState(true)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+
+  const fetchLawyers = async () => {
+    const token = localStorage.getItem('login_token')
+    try {
+      const data = await getLawyers(token)
+      console.log('Lista de abogados:', data)
+      setLawyers(data.data)
+    } catch (error) {
+      console.error('Error fetching lawyers:', error)
+    } finally {
+      setLoading(false)
+    }
+  }
 
   useEffect(() => {
-    const token = localStorage.getItem('login_token')
-    const fetchLawyers = async () => {
-      try {
-        const data = await getLawyers(token)
-        console.log('Lista de abogados:', data)
-        setLawyers(data.data)
-      } catch (error) {
-        console.error('Error fetching lawyers:', error)
-      } finally {
-        setLoading(false)
-      }
-    }
-
     fetchLawyers()
   }, [])
+
+  const handleCreateSuccess = () => {
+    fetchLawyers() 
+  }
 
   return (
     <div className="p-8 bg-gray-50 min-h-screen">
@@ -32,7 +38,10 @@ export const ContentLawyers = () => {
             <h1 className="text-3xl font-bold text-gray-900">Gestión de Abogados</h1>
             <p className="text-gray-600 mt-1">Total de abogados: {lawyers.length}</p>
           </div>
-          <button className="flex items-center gap-2 bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition">
+          <button 
+            className="flex items-center gap-2 bg-black text-white px-4 py-2 rounded-lg cursor-pointer hover:bg-gray-700 transition"
+            onClick={() => setIsModalOpen(true)}
+            >
             <Plus size={20} />
             Nuevo abogado
           </button>
@@ -94,6 +103,11 @@ export const ContentLawyers = () => {
           </div>
         )}
       </div>
+      <CreateLawyerModal 
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSuccess={handleCreateSuccess}
+      />
     </div>
   )
 }

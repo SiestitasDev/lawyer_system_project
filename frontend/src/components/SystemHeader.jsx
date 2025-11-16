@@ -23,7 +23,7 @@ export const SystemHeader = ({ role }) => {
       case 'LAWYER':
         return(
           <>
-            <button className="text-white">Perfil</button>
+            <button onClick={() => navigate('/system/profile')} className="text-white">Perfil</button>
             <button className="text-white">Ver casos</button>
             <button className="text-white">Ver citas</button>
           </>

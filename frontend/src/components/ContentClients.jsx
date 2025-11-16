@@ -1,28 +1,34 @@
 import { getClients } from "../services/admin/adminService"
 import { useEffect, useState } from "react"
 import { Plus, Edit, Trash2 } from "lucide-react"
+import CreateClientModal from "./CreateClientModal"
 
 export const ContentClients = () => {
 
   const [clients, setClients] = useState([])
   const [loading, setLoading] = useState(true)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+
+  const fetchClients = async () => {
+    const token = localStorage.getItem('login_token')
+    try {
+      const data = await getClients(token)
+      console.log('Lista de clientes:', data)
+      setClients(data.data)
+    } catch (error) {
+      console.error('Error fetching clients:', error)
+    } finally {
+      setLoading(false)
+    }
+  }
 
   useEffect(() => {
-    const token = localStorage.getItem('login_token')
-    const fetchClients = async () => {
-      try {
-        const data = await getClients(token)
-        console.log('Lista de clientes:', data)
-        setClients(data.data)
-      } catch (error) {
-        console.error('Error fetching clients:', error)
-      } finally {
-        setLoading(false)
-      }
-    }
-
     fetchClients()
   }, [])
+
+  const handleCreateSuccess = () => {
+    fetchClients() 
+  }
 
   return (
     <div className="p-8 bg-gray-50 min-h-screen">
@@ -32,7 +38,7 @@ export const ContentClients = () => {
             <h1 className="text-3xl font-bold text-gray-900">Gestión de Clientes</h1>
             <p className="text-gray-600 mt-1">Total de clientes: {clients.length}</p>
           </div>
-          <button className="flex items-center gap-2 bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition">
+          <button onClick={() => setIsModalOpen(true)} className="flex items-center gap-2 bg-black text-white px-4 py-2 rounded-lg cursor-pointer hover:bg-gray-700 transition">
             <Plus size={20} />
             Nuevo cliente
           </button>
@@ -94,6 +100,11 @@ export const ContentClients = () => {
           </div>
         )}
       </div>
+      <CreateClientModal 
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSuccess={handleCreateSuccess}
+      />
     </div>
   )
 }

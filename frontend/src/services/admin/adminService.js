@@ -35,3 +35,42 @@ export const getAdmins = async (token) => {
     const data = await response.json()
     return data
 }
+
+export const createAdmin = async (adminData, token) => {
+    const response = await fetch(`${API_URL}/auth/register`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(adminData)  
+    })
+    const data = await response.json()
+    return data
+}
+
+export const createLawyer = async (lawyerData, token) => {
+    const response = await fetch(`${API_URL}/admin/lawyers`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(lawyerData)
+    })
+    const data = await response.json()
+    return data
+}
+
+export const createClient = async (clientData, token) => {
+    const response = await fetch(`${API_URL}/admin/clients`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(clientData)
+    })
+    const data = await response.json()
+    return data
+}
