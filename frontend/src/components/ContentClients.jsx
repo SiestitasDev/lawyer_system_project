@@ -1,13 +1,20 @@
-import { getClients } from "../services/admin/adminService"
+import { getClients, deleteClient } from "../services/admin/adminService"
 import { useEffect, useState } from "react"
 import { Plus, Edit, Trash2 } from "lucide-react"
 import CreateClientModal from "./CreateClientModal"
+import DeleteConfirmModal from "./DeleteConfirmModal"
 
 export const ContentClients = () => {
 
   const [clients, setClients] = useState([])
   const [loading, setLoading] = useState(true)
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [deleteConfirm, setDeleteConfirm] = useState({
+    isOpen: false,
+    clientId: null,
+    clientName: ''
+  })
+  const [isDeleting, setIsDeleting] = useState(false)
 
   const fetchClients = async () => {
     const token = localStorage.getItem('login_token')
@@ -28,6 +35,39 @@ export const ContentClients = () => {
 
   const handleCreateSuccess = () => {
     fetchClients() 
+  }
+
+  const openDeleteConfirm = (clientId, clientName) => {
+    setDeleteConfirm({
+      isOpen: true,
+      clientId,
+      clientName
+    })
+  }
+
+  const closeDeleteConfirm = () => {
+    setDeleteConfirm({
+      isOpen: false,
+      clientId: null,
+      clientName: ''
+    })
+  }
+
+  const handleConfirmDelete = async () => {
+    setIsDeleting(true)
+    try {
+      const token = localStorage.getItem('login_token')
+      await deleteClient(deleteConfirm.clientId, token)
+      
+      // Recargar la lista completa
+      fetchClients()
+      closeDeleteConfirm()
+    } catch (error) {
+      console.error('Error deleting client:', error)
+      alert('Error al eliminar el cliente: ' + error.message)
+    } finally {
+      setIsDeleting(false)
+    }
   }
 
   return (
@@ -88,7 +128,11 @@ export const ContentClients = () => {
                         <button className="p-2 hover:bg-blue-50 text-blue-600 rounded-lg transition" title="Editar">
                           <Edit size={18} />
                         </button>
-                        <button className="p-2 hover:bg-red-50 text-red-600 rounded-lg transition" title="Eliminar">
+                        <button 
+                          onClick={() => openDeleteConfirm(client.id, client.name)}
+                          className="p-2 hover:bg-red-50 text-red-600 rounded-lg transition cursor-pointer"
+                          title="Eliminar"
+                        >
                           <Trash2 size={18} />
                         </button>
                       </div>
@@ -104,6 +148,14 @@ export const ContentClients = () => {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onSuccess={handleCreateSuccess}
+      />
+
+      <DeleteConfirmModal
+        isOpen={deleteConfirm.isOpen}
+        itemName={deleteConfirm.clientName}
+        isLoading={isDeleting}
+        onConfirm={handleConfirmDelete}
+        onCancel={closeDeleteConfirm}
       />
     </div>
   )
