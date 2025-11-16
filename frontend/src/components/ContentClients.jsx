@@ -2,13 +2,16 @@ import { getClients, deleteClient } from "../services/admin/adminService"
 import { useEffect, useState } from "react"
 import { Plus, Edit, Trash2 } from "lucide-react"
 import CreateClientModal from "./CreateClientModal"
+import EditClientModal from "./EditClientModal"
 import DeleteConfirmModal from "./DeleteConfirmModal"
 
 export const ContentClients = () => {
 
   const [clients, setClients] = useState([])
   const [loading, setLoading] = useState(true)
-  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false)
+  const [selectedClient, setSelectedClient] = useState(null)
   const [deleteConfirm, setDeleteConfirm] = useState({
     isOpen: false,
     clientId: null,
@@ -34,7 +37,18 @@ export const ContentClients = () => {
   }, [])
 
   const handleCreateSuccess = () => {
-    fetchClients() 
+    fetchClients()
+  }
+
+  const handleEditClick = (client) => {
+    setSelectedClient(client)
+    setIsEditModalOpen(true)
+  }
+
+  const handleEditSuccess = () => {
+    fetchClients()
+    setIsEditModalOpen(false)
+    setSelectedClient(null)
   }
 
   const openDeleteConfirm = (clientId, clientName) => {
@@ -58,8 +72,7 @@ export const ContentClients = () => {
     try {
       const token = localStorage.getItem('login_token')
       await deleteClient(deleteConfirm.clientId, token)
-      
-      // Recargar la lista completa
+
       fetchClients()
       closeDeleteConfirm()
     } catch (error) {
@@ -78,7 +91,7 @@ export const ContentClients = () => {
             <h1 className="text-3xl font-bold text-gray-900">Gestión de Clientes</h1>
             <p className="text-gray-600 mt-1">Total de clientes: {clients.length}</p>
           </div>
-          <button onClick={() => setIsModalOpen(true)} className="flex items-center gap-2 bg-black text-white px-4 py-2 rounded-lg cursor-pointer hover:bg-gray-700 transition">
+          <button onClick={() => setIsCreateModalOpen(true)} className="flex items-center gap-2 bg-black text-white px-4 py-2 rounded-lg cursor-pointer hover:bg-gray-700 transition">
             <Plus size={20} />
             Nuevo cliente
           </button>
@@ -115,20 +128,23 @@ export const ContentClients = () => {
                     <td className="px-6 py-4 text-sm text-gray-900 font-medium">{client.name}</td>
                     <td className="px-6 py-4 text-sm text-gray-600">{client.email}</td>
                     <td className="px-6 py-4 text-sm">
-                      <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${
-                        client.is_active 
-                          ? 'bg-green-100 text-green-800' 
+                      <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${client.is_active
+                          ? 'bg-green-100 text-green-800'
                           : 'bg-red-100 text-red-800'
-                      }`}>
+                        }`}>
                         {client.is_active ? "Activo" : "Inactivo"}
                       </span>
                     </td>
                     <td className="px-6 py-4 text-sm">
                       <div className="flex gap-2">
-                        <button className="p-2 hover:bg-blue-50 text-blue-600 rounded-lg transition" title="Editar">
+                        <button
+                          onClick={() => handleEditClick(client)}
+                          className="p-2 hover:bg-blue-50 text-blue-600 rounded-lg transition cursor-pointer"
+                          title="Editar"
+                        >
                           <Edit size={18} />
                         </button>
-                        <button 
+                        <button
                           onClick={() => openDeleteConfirm(client.id, client.name)}
                           className="p-2 hover:bg-red-50 text-red-600 rounded-lg transition cursor-pointer"
                           title="Eliminar"
@@ -144,10 +160,18 @@ export const ContentClients = () => {
           </div>
         )}
       </div>
-      <CreateClientModal 
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+
+      <CreateClientModal
+        isOpen={isCreateModalOpen}
+        onClose={() => setIsCreateModalOpen(false)}
         onSuccess={handleCreateSuccess}
+      />
+
+      <EditClientModal
+        isOpen={isEditModalOpen}
+        onClose={() => setIsEditModalOpen(false)}
+        onSuccess={handleEditSuccess}
+        client={selectedClient}
       />
 
       <DeleteConfirmModal
@@ -160,3 +184,5 @@ export const ContentClients = () => {
     </div>
   )
 }
+
+export default ContentClients
