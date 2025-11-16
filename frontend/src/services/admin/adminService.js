@@ -62,6 +62,18 @@ export const createLawyer = async (lawyerData, token) => {
     return data
 }
 
+export const deleteLawyer = async (lawyerId, token) => {
+    const response = await fetch(`${API_URL}/admin/lawyers/${lawyerId}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }
+    })
+    const data = await response.json()
+    return data
+}
+
 export const createClient = async (clientData, token) => {
     const response = await fetch(`${API_URL}/admin/clients`, {
         method: 'POST',
@@ -70,6 +82,18 @@ export const createClient = async (clientData, token) => {
             'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify(clientData)
+    })
+    const data = await response.json()
+    return data
+}
+
+export const deleteClient = async (clientId, token) => {
+    const response = await fetch(`${API_URL}/admin/clients/${clientId}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }
     })
     const data = await response.json()
     return data

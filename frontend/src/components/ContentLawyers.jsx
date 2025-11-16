@@ -1,13 +1,20 @@
 import { useEffect, useState } from "react"
-import { getLawyers } from "../services/admin/adminService"
+import { getLawyers, deleteLawyer } from "../services/admin/adminService"
 import { Edit, Trash2, Plus } from 'lucide-react'
 import CreateLawyerModal from "./CreateLawyerModal"
+import DeleteConfirmModal from "./DeleteConfirmModal"
 
 export const ContentLawyers = () => {
 
   const [lawyers, setLawyers] = useState([])
   const [loading, setLoading] = useState(true)
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [deleteConfirm, setDeleteConfirm] = useState({
+    isOpen: false,
+    lawyerId: null,
+    lawyerName: ''
+  })
+  const [isDeleting, setIsDeleting] = useState(false)
 
   const fetchLawyers = async () => {
     const token = localStorage.getItem('login_token')
@@ -28,6 +35,38 @@ export const ContentLawyers = () => {
 
   const handleCreateSuccess = () => {
     fetchLawyers() 
+  }
+
+  const openDeleteConfirm = (lawyerId, lawyerName) => {
+    setDeleteConfirm({
+      isOpen: true,
+      lawyerId,
+      lawyerName
+    })
+  }
+
+  const closeDeleteConfirm = () => {
+    setDeleteConfirm({
+      isOpen: false,
+      lawyerId: null,
+      lawyerName: ''
+    })
+  }
+
+  const handleConfirmDelete = async () => {
+    setIsDeleting(true)
+    try {
+      const token = localStorage.getItem('login_token')
+      await deleteLawyer(deleteConfirm.lawyerId, token)
+      
+      fetchLawyers()
+      closeDeleteConfirm()
+    } catch (error) {
+      console.error('Error deleting lawyer:', error)
+      alert('Error al eliminar el abogado: ' + error.message)
+    } finally {
+      setIsDeleting(false)
+    }
   }
 
   return (
@@ -91,7 +130,11 @@ export const ContentLawyers = () => {
                         <button className="p-2 hover:bg-blue-50 text-blue-600 rounded-lg transition" title="Editar">
                           <Edit size={18} />
                         </button>
-                        <button className="p-2 hover:bg-red-50 text-red-600 rounded-lg transition" title="Eliminar">
+                        <button 
+                          onClick={() => openDeleteConfirm(lawyer.id, lawyer.name)}
+                          className="p-2 hover:bg-red-50 text-red-600 rounded-lg transition cursor-pointer"
+                          title="Eliminar"
+                        >
                           <Trash2 size={18} />
                         </button>
                       </div>
@@ -107,6 +150,14 @@ export const ContentLawyers = () => {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onSuccess={handleCreateSuccess}
+      />
+
+      <DeleteConfirmModal
+        isOpen={deleteConfirm.isOpen}
+        itemName={deleteConfirm.lawyerName}
+        isLoading={isDeleting}
+        onConfirm={handleConfirmDelete}
+        onCancel={closeDeleteConfirm}
       />
     </div>
   )
