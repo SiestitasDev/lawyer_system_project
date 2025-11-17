@@ -2,13 +2,16 @@ import { useEffect, useState } from "react"
 import { getLawyers, deleteLawyer } from "../services/admin/adminService"
 import { Edit, Trash2, Plus } from 'lucide-react'
 import CreateLawyerModal from "./CreateLawyerModal"
+import EditLawyerModal from "./EditLawyerModal"
 import DeleteConfirmModal from "./DeleteConfirmModal"
 
 export const ContentLawyers = () => {
 
   const [lawyers, setLawyers] = useState([])
   const [loading, setLoading] = useState(true)
-  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false)
+  const [selectedLawyer, setSelectedLawyer] = useState(null)
   const [deleteConfirm, setDeleteConfirm] = useState({
     isOpen: false,
     lawyerId: null,
@@ -34,7 +37,18 @@ export const ContentLawyers = () => {
   }, [])
 
   const handleCreateSuccess = () => {
-    fetchLawyers() 
+    fetchLawyers()
+  }
+
+  const handleEditClick = (lawyer) => {
+    setSelectedLawyer(lawyer)
+    setIsEditModalOpen(true)
+  }
+
+  const handleEditSuccess = () => {
+    fetchLawyers()
+    setIsEditModalOpen(false)
+    setSelectedLawyer(null)
   }
 
   const openDeleteConfirm = (lawyerId, lawyerName) => {
@@ -58,7 +72,7 @@ export const ContentLawyers = () => {
     try {
       const token = localStorage.getItem('login_token')
       await deleteLawyer(deleteConfirm.lawyerId, token)
-      
+
       fetchLawyers()
       closeDeleteConfirm()
     } catch (error) {
@@ -77,10 +91,10 @@ export const ContentLawyers = () => {
             <h1 className="text-3xl font-bold text-gray-900">Gestión de Abogados</h1>
             <p className="text-gray-600 mt-1">Total de abogados: {lawyers.length}</p>
           </div>
-          <button 
+          <button
             className="flex items-center gap-2 bg-black text-white px-4 py-2 rounded-lg cursor-pointer hover:bg-gray-700 transition"
-            onClick={() => setIsModalOpen(true)}
-            >
+            onClick={() => setIsCreateModalOpen(true)}
+          >
             <Plus size={20} />
             Nuevo abogado
           </button>
@@ -117,20 +131,23 @@ export const ContentLawyers = () => {
                     <td className="px-6 py-4 text-sm text-gray-900 font-medium">{lawyer.name}</td>
                     <td className="px-6 py-4 text-sm text-gray-600">{lawyer.email}</td>
                     <td className="px-6 py-4 text-sm">
-                      <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${
-                        lawyer.is_active 
-                          ? 'bg-green-100 text-green-800' 
+                      <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${lawyer.is_active
+                          ? 'bg-green-100 text-green-800'
                           : 'bg-red-100 text-red-800'
-                      }`}>
+                        }`}>
                         {lawyer.is_active ? "Activo" : "Inactivo"}
                       </span>
                     </td>
                     <td className="px-6 py-4 text-sm">
                       <div className="flex gap-2">
-                        <button className="p-2 hover:bg-blue-50 text-blue-600 rounded-lg transition" title="Editar">
+                        <button
+                          onClick={() => handleEditClick(lawyer)}
+                          className="p-2 hover:bg-blue-50 text-blue-600 rounded-lg transition cursor-pointer"
+                          title="Editar"
+                        >
                           <Edit size={18} />
                         </button>
-                        <button 
+                        <button
                           onClick={() => openDeleteConfirm(lawyer.id, lawyer.name)}
                           className="p-2 hover:bg-red-50 text-red-600 rounded-lg transition cursor-pointer"
                           title="Eliminar"
@@ -146,10 +163,18 @@ export const ContentLawyers = () => {
           </div>
         )}
       </div>
-      <CreateLawyerModal 
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+
+      <CreateLawyerModal
+        isOpen={isCreateModalOpen}
+        onClose={() => setIsCreateModalOpen(false)}
         onSuccess={handleCreateSuccess}
+      />
+
+      <EditLawyerModal
+        isOpen={isEditModalOpen}
+        onClose={() => setIsEditModalOpen(false)}
+        onSuccess={handleEditSuccess}
+        lawyer={selectedLawyer}
       />
 
       <DeleteConfirmModal
@@ -162,3 +187,5 @@ export const ContentLawyers = () => {
     </div>
   )
 }
+
+export default ContentLawyers
